@@ -203,14 +203,13 @@ DEPENDS_gp-lab := $(WHEEL_FILE)
 
 # Extra targets for each image
 TARGETS_gp-spark-base:
-TARGETS_gp-kernel-py TARGETS_gp-kernel-py TARGETS_gp-kernel-spark-py TARGETS_gp-kernel-r \
-	TARGETS_gp-kernel-spark-r TARGETS_gp-kernel-scala TARGETS_gp-jkg TARGETS_gp-lab: wheel $(BASE_IMAGES)
+TARGETS_gp-kernel-py TARGETS_gp-kernel-py: wheel
 
 # Generate image creation targets for each entry in $(DOCKER_IMAGES).  Switch 'eval' to 'info' to see what is produced.
+# @make clean-$1 TARGETS_$1
 define BUILD_IMAGE
 $1: .image-$1
 .image-$1: $$(DOCKER_$1)/* $$(DEPENDS_$1)
-	@make clean-$1 TARGETS_$1
 	@mkdir -p build/docker/$1
 	@cp -r $$(DOCKER_$1)/* $$(DEPENDS_$1) build/docker/$1
 	(cd build/docker/$1; \
@@ -224,13 +223,13 @@ $1: .image-$1
 endef
 $(foreach image,$(DOCKER_IMAGES),$(eval $(call BUILD_IMAGE,$(image))))
 
-# Generate clean-xxx targets for each entry in $(DOCKER_IMAGES).  Switch 'eval' to 'info' to see what is produced.
-define CLEAN_IMAGE
-clean-$1:
-	@rm -f .image-$1
-	@-docker rmi -f $(DOCKER_ORG)/$1:$(TAG)
-endef
-$(foreach image,$(DOCKER_IMAGES),$(eval $(call CLEAN_IMAGE,$(image))))
+# # Generate clean-xxx targets for each entry in $(DOCKER_IMAGES).  Switch 'eval' to 'info' to see what is produced.
+# define CLEAN_IMAGE
+# clean-$1:
+# 	@rm -f .image-$1
+# 	@-docker rmi -f $(DOCKER_ORG)/$1:$(TAG)
+# endef
+# $(foreach image,$(DOCKER_IMAGES),$(eval $(call CLEAN_IMAGE,$(image))))
 
 # Publish each publish image on $(PUSHED_IMAGES) to DockerHub.  Switch 'eval' to 'info' to see what is produced.
 define PUSH_IMAGE
