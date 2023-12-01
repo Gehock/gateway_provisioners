@@ -65,6 +65,11 @@ class KubernetesProvisioner(ContainerProvisionerBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        self.log.error("KubernetesProvisioner.__init__ ERROR")
+        self.log.warning("KubernetesProvisioner.__init__ WARNING")
+        self.log.info("KubernetesProvisioner.__init__ INFO")
+        self.log.debug("KubernetesProvisioner.__init__ DEBUG")
+
         self.kernel_pod_name = None
         self.kernel_namespace = None
         self.delete_kernel_namespace = False
