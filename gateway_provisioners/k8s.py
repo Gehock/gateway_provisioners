@@ -88,6 +88,7 @@ class KubernetesProvisioner(ContainerProvisionerBase):
         for key in os.environ:
             if key.startswith("KUBECONFIG") or key.startswith("KUBERNETES_SERVICE"):
                 if "env" not in kwargs:
+                    self.log.debug("Creating env dict for pre_launch")
                     kwargs["env"] = {}
                 kwargs["env"][key] = os.environ[key]
         kwargs = await super().pre_launch(**kwargs)
