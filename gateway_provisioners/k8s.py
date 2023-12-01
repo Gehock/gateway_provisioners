@@ -87,6 +87,8 @@ class KubernetesProvisioner(ContainerProvisionerBase):
         # for envs prefixed with KUBECONFIG.
         for key in os.environ:
             if key.startswith("KUBECONFIG") or key.startswith("KUBERNETES_SERVICE"):
+                if "env" not in kwargs:
+                    kwargs["env"] = {}
                 kwargs["env"][key] = os.environ[key]
         kwargs = await super().pre_launch(**kwargs)
         # Determine pod name and namespace - creating the latter if necessary
