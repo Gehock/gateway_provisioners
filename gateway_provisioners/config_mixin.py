@@ -102,9 +102,12 @@ enforcement.  (GP_PORT_RANGE env var)""",
 
     @default("launch_timeout")
     def _launch_timeout_default(self):
-        return int(
+        value = int(
             os.getenv(
                 self.launch_timeout_env,
                 os.getenv("KERNEL_LAUNCH_TIMEOUT", self.launch_timeout_default_value),
             )
         )
+        self.log.error("launch_timeout: %s, %i", self.launch_timeout_env, value)
+        self.log.error(f"launch_timeout: {os.environ}")
+        return value
